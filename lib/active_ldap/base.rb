@@ -606,8 +606,10 @@ module ActiveLdap
           real_klass = self.class
         end
 
-        objectclasses = attributes["objectClass"].map {|c| c.downcase}
-        real_klass = real_klass.subclass_map[objectclasses] || real_klass
+        if attributes["objectClass"]
+          objectclasses = attributes["objectClass"].map {|c| c.downcase}
+          real_klass = real_klass.subclass_map[objectclasses] || real_klass
+        end
         obj = real_klass.allocate
         conn = options[:connection] || connection
         obj.connection = conn if conn != connection
